@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Middleware\AdminRouteProtect;
+use App\Http\Middleware\ProtectAPIRoute;
+use App\Http\Middleware\WorkerRouteProtect;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -13,7 +16,11 @@ return Application::configure(basePath: dirname(__DIR__))
         apiPrefix:'/api'
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        $middleware->api(prepend:[
+            ProtectAPIRoute::class,
+            AdminRouteProtect::class,
+            WorkerRouteProtect::class
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
