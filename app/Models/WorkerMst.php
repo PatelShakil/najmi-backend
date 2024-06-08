@@ -26,7 +26,7 @@ class WorkerMst extends Model
 
     public function admin()
     {
-        return $this->hasOne(AdminMst::class, 'id');
+        return $this->hasOne(AdminMst::class, 'id','created_by');
     }
 
 

@@ -7,9 +7,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => "api"], (function () {
-
     Route::prefix('/admin')->group(function () {
         Route::post('/login', [AuthController::class, 'adminLogin']);
+        Route::post('/createworker', [AuthController::class, 'createWorker']);
     })->withoutMiddleware(WorkerRouteProtect::class);
 
     Route::prefix('/worker')->group(function () {

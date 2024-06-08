@@ -17,9 +17,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->api(prepend:[
-            ProtectAPIRoute::class,
-            AdminRouteProtect::class,
-            WorkerRouteProtect::class
+            ProtectAPIRoute::class
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
