@@ -92,15 +92,15 @@ class AuthController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'phone' => 'required',
+            'phone' => 'required|min:10',
             'pin' => 'required|min:6',
             'admin_id' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json([
                 "status" => false,
-                "data" => $validator->messages()
-            ], 400);
+                "data" => $validator->messages()->first()
+            ]);
         } else {
             $token = generateToken();
 
