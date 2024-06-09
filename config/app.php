@@ -123,4 +123,19 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+
+    // 'providers' => [
+    //     // ...
+    //     Barryvdh\DomPDF\ServiceProvider::class,
+    //     Milon\Barcode\BarcodeServiceProvider::class,
+    // ],
+    
+    // 'aliases' => [
+    //     // ...
+    //     'PDF' => Barryvdh\DomPDF\Facade\Pdf::class,
+    //     'DNS1D' => Milon\Barcode\Facades\DNS1DFacade::class,
+    //     'DNS2D' => Milon\Barcode\Facades\DNS2DFacade::class,
+    // ],
+
+
 ];

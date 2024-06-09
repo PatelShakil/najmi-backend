@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\ManageStockController;
 use App\Http\Middleware\AdminRouteProtect;
 use App\Http\Middleware\WorkerRouteProtect;
 use Illuminate\Http\Request;
@@ -10,6 +11,7 @@ Route::group(['middleware' => "api"], (function () {
     Route::prefix('/admin')->group(function () {
         Route::post('/login', [AuthController::class, 'adminLogin']);
         Route::post('/createworker', [AuthController::class, 'createWorker']);
+        Route::post('/generate-pdf',[ManageStockController::class, 'generatePdfWithBarcodes']);
     })->withoutMiddleware(WorkerRouteProtect::class);
 
     Route::prefix('/worker')->group(function () {
