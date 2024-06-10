@@ -25,4 +25,12 @@ class ManageStockController extends Controller
             $pdf = Pdf::loadView('barcodes', ['barcodeImages' => $barcodeImages]);
             return $pdf->download('barcodes.pdf');
         }
+
+        public function getBarcodeList(Request $request){
+            $brand_id = $request->brand_id;
+            $category_id = $request->category_id;
+            $count = $request->count;
+            $mrp = $request->mrp;
+            $admin_id = $request->admin_id;
+        }
 }
