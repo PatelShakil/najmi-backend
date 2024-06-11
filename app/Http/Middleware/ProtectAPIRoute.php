@@ -17,6 +17,7 @@ class ProtectAPIRoute
      */
     public function handle(Request $request, Closure $next): Response
     {
+        date_default_timezone_set("Asia/Kolkata");
         if (!str_contains($request->path(), "/login")) {
             $token = $request->header('token');
             if (AdminMst::where("token", $token)->exists()) {
@@ -24,7 +25,7 @@ class ProtectAPIRoute
             } else if (WorkerMst::where("token", $token)->exists()) {
                 return $next($request);
             } else {
-                return response()->json(["message" => "Unauthorised access"], 401);
+                return response()->json(["message" => "Unauthorized access"], 401);
             }
         } else {
             return $next($request);
