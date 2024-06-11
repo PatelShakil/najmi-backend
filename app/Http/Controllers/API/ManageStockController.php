@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\BrandMst;
+use App\Models\CategoryMst;
 use App\Models\StockMst;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -10,8 +12,54 @@ use Illuminate\Support\Facades\Log;
 
 class ManageStockController extends Controller
 {
-
     public function getBarcodeList(Request $request)
+    {
+        $brand_id = $request->brand_id;
+        $category_id = $request->category_id;
+        $count = $request->quantity;
+        $mrp = $request->mrp;
+        $admin_id = $request->admin_id;
+        $color_id = $request->color_id;
+        $name = $request->name;
+        $list = [];
+        if (BrandMst::where("id", $brand_id)->where("enabled", true)->exists()) {
+            if (CategoryMst::where("id", $category_id)->where("enabled", true)->where("brand_id", $brand_id)->exists()) {
+                $i = 1;
+                while ($i <= $count) {
+                    $stock = new StockMst();
+                    $stock->barcode_no = generateBarcode($brand_id, $category_id);
+                    $stock->name = $name;
+                    $stock->brand_id = $brand_id;
+                    $stock->category_id = $category_id;
+                    $stock->mrp = $mrp;
+                    $stock->created_by = $admin_id;
+                    if ($color_id != null) {
+                        $stock->color_id = $request->color_id;
+                    }
+                    $stock->save();
+                    $list[] = $stock->barcode_no;
+                    $i++;
+                }
+                return response()->json([
+                    "status" => true,
+                    "data" => $list
+                ]);
+            } else {
+                return response()->json([
+                    "status" => false,
+                    "data" => "Category not found"
+                ]);
+            }
+        } else {
+            return response()->json([
+                "status" => false,
+                "data" => "Brand not found"
+            ]);
+        }
+    }
+
+
+    public function getBarcodeList1(Request $request)
     {
         // Logging the start of the function
         Log::info('getBarcodeList started', $request->all());

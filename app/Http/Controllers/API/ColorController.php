@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\ColorMst;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -37,4 +38,14 @@ class ColorController extends Controller
             return response()->json(['status' => false, 'data' => $e->getMessage()]);
         }
     }
+
+    public function getColors(Request $request){
+        $colors = ColorMst::where('enabled', true)->with("admin")->get();
+        return response()->json([
+            'status' => true,
+            'data' => $colors
+        ]);
+    }
+
+
 }

@@ -16,6 +16,7 @@ Route::group(['middleware' => "api"], (function () {
         Route::post('/createworker', [AuthController::class, 'createWorker']);
         Route::post('/addbrand',[BrandController::class, 'addBrand']);
         Route::get('/getbrands', [BrandController::class, 'getBrands']);
+        Route::get('/getcolors', [ColorController::class, 'getColors']);
         Route::post('/createcategory',[CategoryController::class, 'createCategory']);
         Route::post('/addcolor',[ColorController::class, 'addColor']);
         Route::post('/getbarcodelist',[ManageStockController::class, 'getBarcodeList']);
