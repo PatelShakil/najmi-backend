@@ -21,6 +21,7 @@ Route::group(['middleware' => "api"], (function () {
         Route::post('/addcolor',[ColorController::class, 'addColor']);
         Route::post('/getbarcodelist',[ManageStockController::class, 'getBarcodeList']);
         Route::get('/getcategories/{id}',[CategoryController::class, 'getCategories']);
+        Route::get('/getworkers',[AuthController::class, 'getWorkers']);
     })->withoutMiddleware(WorkerRouteProtect::class);
 
     Route::prefix('/worker')->group(function () {

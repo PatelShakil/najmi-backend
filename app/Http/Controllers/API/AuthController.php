@@ -133,4 +133,28 @@ class AuthController extends Controller
             }
         }
     }
+
+    public function getWorkers(Request $request)
+    {
+        $admin = AdminMst::where("token", $request->header("token"))->get()->first();
+        if ($admin != null && $admin->enabled) {
+            $workers = WorkerMst::where("created_by", $admin->id)->get();
+            if ($workers != null && $workers->count() > 0) {
+                return response()->json([
+                    "status" => true,
+                    "data" => $workers
+                ]);
+            } else {
+                return response()->json([
+                    "status" => false,
+                    "data" => "Workers Not Found"
+                ]);
+            }
+        } else {
+            return response()->json([
+                "status" => false,
+                "data" => "Admin Not Found or Suspended"
+            ]);
+        }
+    }
 }
