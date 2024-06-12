@@ -131,4 +131,32 @@ class ManageStockController extends Controller
         }
     }
 
+    public function getStock(Request $request, $br)
+    {
+        if (StockMst::where("barcode_no", $br)->exists()) {
+            $stock = StockMst::where('barcode_no', $br)
+                ->with("admin")
+                ->with("brand")
+                ->with("category")
+                ->with("color")
+                ->with("worker")->first();
+
+            if ($stock->worker == null) {
+                return response()->json([
+                    'status' => true,
+                    'data' => $stock
+                ]);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'data' => null
+                ]);
+            }
+        } else {
+            return response()->json([
+                'status' => false,
+                'data' => null
+            ]);
+        }
+    }
 }
