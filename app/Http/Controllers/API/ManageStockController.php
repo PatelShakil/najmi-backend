@@ -32,21 +32,21 @@ class ManageStockController extends Controller
             foreach ($stocks as $stock) {
                 $br_no = 0;
 
-                if (BrandMst::where("id", $stock->brand_id)->where("enabled", true)->exists()) {
-                    if (CategoryMst::where("id", $stock->category_id)->where("enabled", true)->where("brand_id", $stock->brand_id)->exists()) {
-                        while ($br_no < $stock->quantity) {
+                if (BrandMst::where("id",$stock['brand_id'])->where("enabled", true)->exists()) {
+                    if (CategoryMst::where("id", $stock['category_id'])->where("enabled", true)->where("brand_id",$stock['brand_id'])->exists()) {
+                        // Loop to create stock entries
+                        while ($br_no < $stock['quantity']) {
                             $stockDto = new StockMst();
-                            $stockDto->barcode_no = generateBarcode($stock->brand_id, $stock->category_id);
-                            $stockDto->name = $stock->name;
-                            $stockDto->brand_id = $stock->brand_id;
-                            $stockDto->category_id = $stock->category_id;
-                            $stockDto->mrp = $stock->mrp;
-                            $stockDto->created_by = $stock->created_by;
-
-                            if ($stock->color_id != null) {
-                                $stockDto->color_id = $stock->color_id;
+                            $stockDto->barcode_no = generateBarcode($stock['brand_id'], $stock['category_id']); // Assume generateBarcode is a method in the same controller
+                            $stockDto->name = $stock['name'];
+                            $stockDto->brand_id = $stock['brand_id'];
+                            $stockDto->category_id = $stock['category_id'];
+                            $stockDto->mrp = $stock['mrp'];
+                            $stockDto->created_by = $stock['created_by'];
+                            // Assuming color_id is optional, otherwise include validation above
+                            if (isset($stock['color_id'])) {
+                                $stockDto->color_id = $stock['color_id'];
                             }
-
                             $stockDto->save();
                             $barcodes[] = $stockDto;
                             $br_no++;
