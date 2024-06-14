@@ -12,6 +12,12 @@ class ColorMst extends Model
     protected $table = 'colors_mst';
 
     protected $fillable = ['name', 'code', 'enabled', 'created_by'];
+    protected $casts = [
+        'enabled' => 'boolean'
+    ];
+
+
+
 
     public function stocks()
     {
