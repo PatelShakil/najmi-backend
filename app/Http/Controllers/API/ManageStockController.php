@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\BrandMst;
 use App\Models\CategoryMst;
 use App\Models\StockMst;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -13,6 +14,74 @@ use Illuminate\Support\Facades\Log;
 class ManageStockController extends Controller
 {
     public function getBarcodeList(Request $request)
+    {
+        $stocks = $request->stocks;
+        $barcodes = [];
+
+        if ($stocks->count() <= 0) {
+            return response()->json([
+                "status" => false,
+                "data" => "Stock not found"
+            ]);
+        }
+
+        try {
+            DB::beginTransaction();
+
+            foreach ($stocks as $stock) {
+                $br_no = 0;
+
+                if (BrandMst::where("id", $stock->brand_id)->where("enabled", true)->exists()) {
+                    if (CategoryMst::where("id", $stock->category_id)->where("enabled", true)->where("brand_id", $stock->brand_id)->exists()) {
+                        while ($br_no < $stock->quantity) {
+                            $stockDto = new StockMst();
+                            $stockDto->barcode_no = generateBarcode($stock->brand_id, $stock->category_id);
+                            $stockDto->name = $stock->name;
+                            $stockDto->brand_id = $stock->brand_id;
+                            $stockDto->category_id = $stock->category_id;
+                            $stockDto->mrp = $stock->mrp;
+                            $stockDto->created_by = $stock->created_by;
+
+                            if ($stock->color_id != null) {
+                                $stockDto->color_id = $stock->color_id;
+                            }
+
+                            $stockDto->save();
+                            $barcodes[] = $stockDto;
+                            $br_no++;
+                        }
+                    } else {
+                        DB::rollBack();
+                        return response()->json([
+                            "status" => false,
+                            "data" => "Category not found"
+                        ]);
+                    }
+                } else {
+                    DB::rollBack();
+                    return response()->json([
+                        "status" => false,
+                        "data" => "Brand not found"
+                    ]);
+                }
+            }
+
+            DB::commit();
+            return response()->json([
+                "status" => true,
+                "data" => $barcodes,
+            ]);
+        } catch (Exception $e) {
+            DB::rollBack();
+            // Optionally log the exception here
+            return response()->json([
+                "status" => false,
+                "data" => $e->getMessage()
+            ]);
+        }
+    }
+
+    public function getBarcodeList2(Request $request)
     {
         $brand_id = $request->brand_id;
         $category_id = $request->category_id;
@@ -37,7 +106,7 @@ class ManageStockController extends Controller
                         $stock->color_id = $request->color_id;
                     }
                     $stock->save();
-                    $list[] = $stock->barcode_no;
+                    $list[] = $stock;
                     $i++;
                 }
                 return response()->json([
