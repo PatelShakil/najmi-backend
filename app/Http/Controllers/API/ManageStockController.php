@@ -18,10 +18,11 @@ class ManageStockController extends Controller
         $stocks = $request->stocks;
         $barcodes = [];
 
-        if ($stocks->count() <= 0) {
+        // Check if $stocks is empty or not an array
+        if (empty($stocks) || !is_array($stocks) || count($stocks) === 0) {
             return response()->json([
                 "status" => false,
-                "data" => "Stock not found"
+                "data" => "No stocks provided"
             ]);
         }
 
