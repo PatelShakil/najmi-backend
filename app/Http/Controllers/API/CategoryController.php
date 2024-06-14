@@ -22,6 +22,7 @@ class CategoryController extends Controller
         // Store the image file
         $imagePath = $request->file('image')->store('public/storage/category-images');
 
+    
         // Create the category
         $category = new CategoryMst();
         $category->name = $validatedData['name'];
