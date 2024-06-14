@@ -61,7 +61,7 @@ class ManageStockController extends Controller
                     DB::rollBack();
                     return response()->json([
                         "status" => false,
-                        "data" => "Brand not found" + $stock->brand_id
+                        "data" => "Brand not found"
                     ]);
                 }
             }
