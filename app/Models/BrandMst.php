@@ -13,6 +13,12 @@ class BrandMst extends Model
 
     protected $fillable = ['name', 'enabled', 'created_by'];
 
+    protected $casts = [
+        'enabled' =>'boolean'
+    ];
+
+
+
     public function categories()
     {
         return $this->hasMany(CategoryMst::class, 'brand_id');

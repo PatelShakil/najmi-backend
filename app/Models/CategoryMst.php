@@ -12,6 +12,9 @@ class CategoryMst extends Model
     protected $table = 'categories_mst';
 
     protected $fillable = ['name', 'brand_id', 'enabled', 'img', 'created_by'];
+    protected $casts = [
+        'enabled'=>'boolean'
+    ];
 
     public function brand()
     {
