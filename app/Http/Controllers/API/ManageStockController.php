@@ -84,6 +84,7 @@ class ManageStockController extends Controller
 
     public function getStock(Request $request){
         $stocks = BrandMst::where("enabled",true)->get();
+        
         if(count($stocks) > 0){
             return response()->json([
                'status' => true,
