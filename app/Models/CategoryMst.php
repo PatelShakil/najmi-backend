@@ -15,6 +15,8 @@ class CategoryMst extends Model
     protected $casts = [
         'enabled'=>'boolean'
     ];
+    protected $appends = ['stock_count', 'sold_products', 'available_products'];
+
 
     public function brand()
     {
@@ -30,4 +32,21 @@ class CategoryMst extends Model
     {
         return $this->belongsTo(AdminMst::class, 'created_by');
     }
+    public function getStockCountAttribute()
+    {
+        return $this->stocks()->count();
+    }
+
+    public function getSoldProductsAttribute()
+    {
+        return $this->stocks()->where('is_sold', true)->count();
+    }
+
+    public function getAvailableProductsAttribute()
+    {
+        return $this->stocks()->where('is_sold', false)->count();
+    }
+
+
+
 }

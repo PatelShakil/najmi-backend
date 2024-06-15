@@ -21,7 +21,8 @@ Route::group(['middleware' => "api"], (function () {
         Route::post('/createcategory',[CategoryController::class, 'createCategory']);
         Route::post('/addcolor',[ColorController::class, 'addColor']);
         Route::post('/getbarcodelist',[ManageStockController::class, 'getBarcodeList']);
-        Route::get('/getcategories/{id}',[CategoryController::class, 'getCategories']);
+        Route::get('/getcategories/{id}',[CategoryController::class, 'getCategoriesById']);
+        Route::get('/getcategories',[CategoryController::class,'getCategories']);
         Route::get('/getworkers',[AuthController::class, 'getWorkers']);
     })->withoutMiddleware(WorkerRouteProtect::class);
 

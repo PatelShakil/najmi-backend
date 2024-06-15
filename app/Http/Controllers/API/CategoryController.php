@@ -43,7 +43,7 @@ class CategoryController extends Controller
         }
     }
 
-    public function getCategories(Request $request, $id)
+    public function getCategoriesById(Request $request, $id)
     {
         $brand = BrandMst::where("id", $id)->where("enabled", true)->first();
         if ($brand != null) {
@@ -59,4 +59,23 @@ class CategoryController extends Controller
             ]);
         }
     }
+    
+    public function getCategories(Request $request)
+    {           
+        
+        $categories = CategoryMst::with("brand")->with("admin")->get();
+
+        if (count($categories) > 0 ) {
+            return response()->json([
+                "status" => true,
+                "data" => $categories
+            ]);
+        } else {
+            return response()->json([
+                "status" => false,
+                "data" => "Brand Not Found"
+            ]);
+        }
+    }
+
 }
