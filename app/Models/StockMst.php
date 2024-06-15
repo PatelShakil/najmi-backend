@@ -18,6 +18,9 @@ class StockMst extends Model
     protected $keyType = 'string';
 
     protected $fillable = ['barcode_no', 'name', 'brand_id', 'category_id', 'color_id', 'mrp', 'created_by', 'is_sold', 'sold_by'];
+    protected $casts = [
+        'is_sold'=>'boolean'
+    ];
 
     public function brand()
     {

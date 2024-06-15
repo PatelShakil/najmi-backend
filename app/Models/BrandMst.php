@@ -14,9 +14,10 @@ class BrandMst extends Model
     protected $fillable = ['name', 'enabled', 'created_by'];
 
     protected $casts = [
-        'enabled' =>'boolean'
+        'enabled' => 'boolean',
     ];
-    protected $appends = ['category_count', 'stock_count'];
+
+    protected $appends = ['category_count', 'stock_count', 'sold_products', 'available_products'];
 
     public function categories()
     {
@@ -41,5 +42,15 @@ class BrandMst extends Model
     public function getStockCountAttribute()
     {
         return $this->stocks()->count();
+    }
+
+    public function getSoldProductsAttribute()
+    {
+        return $this->stocks()->where('is_sold', true)->count();
+    }
+
+    public function getAvailableProductsAttribute()
+    {
+        return $this->stocks()->where('is_sold', false)->count();
     }
 }
