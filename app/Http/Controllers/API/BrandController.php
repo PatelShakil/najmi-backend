@@ -47,7 +47,7 @@ class BrandController extends Controller
     }
 
     public function getBrands(Request $request) {
-        $brands = BrandMst::where("enabled", true)->get();
+        $brands = BrandMst::where("enabled", true)->with("admin")->get();
         if (count($brands) > 0) {
             return response()->json([
                 'status' => true,
