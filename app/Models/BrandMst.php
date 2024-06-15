@@ -16,7 +16,7 @@ class BrandMst extends Model
     protected $casts = [
         'enabled' =>'boolean'
     ];
-    protected $appends = ['categoryCount', 'stockCount'];
+    protected $appends = ['category_count', 'stock_count'];
 
     public function categories()
     {
