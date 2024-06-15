@@ -20,7 +20,7 @@ class CategoryController extends Controller
         ]);
 
         // Store the image file
-        $imagePath = $request->file('image')->store('public/storage/category-images');
+        $imagePath = $request->file('image')->store('public/category-images');
 
     
         // Create the category
