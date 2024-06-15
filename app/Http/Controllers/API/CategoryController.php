@@ -11,7 +11,8 @@ use Illuminate\Support\Facades\Validator;
 
 class CategoryController extends Controller
 {
-    public function createCategory(Request $request){
+    public function createCategory(Request $request)
+    {
         // Validate the request data
         $validatedData = $request->validate([
             'name' => 'required|string',
@@ -20,14 +21,13 @@ class CategoryController extends Controller
         ]);
 
         // Store the image file
-        $imagePath = $request->file('image')->store('public/category-images');
+        $imagePath = $request->file('image')->store('public/category-images');        
 
-    
         // Create the category
         $category = new CategoryMst();
         $category->name = $validatedData['name'];
         $category->brand_id = $validatedData['brand_id'];
-        $category->img = $imagePath;
+        $category->img = str_replace("public", "public/storage",$imagePath);
         $category->created_by = $request->admin_id;
         try {
             $category->save();
@@ -43,15 +43,16 @@ class CategoryController extends Controller
         }
     }
 
-    public function getCategories(Request $request, $id){
-        $brand = BrandMst::where("id", $id)->where("enabled",true)->first();
-        if($brand != null){
-            $categories = CategoryMst::where("brand_id", $id)->where("enabled",true)->with("admin")->get();
+    public function getCategories(Request $request, $id)
+    {
+        $brand = BrandMst::where("id", $id)->where("enabled", true)->first();
+        if ($brand != null) {
+            $categories = CategoryMst::where("brand_id", $id)->where("enabled", true)->with("admin")->get();
             return response()->json([
                 "status" => true,
                 "data" => $categories
             ]);
-        }else{
+        } else {
             return response()->json([
                 "status" => false,
                 "data" => "Brand Not Found"
