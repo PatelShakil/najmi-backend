@@ -16,8 +16,7 @@ class BrandMst extends Model
     protected $casts = [
         'enabled' =>'boolean'
     ];
-
-
+    protected $appends = ['categoryCount', 'stockCount'];
 
     public function categories()
     {
@@ -32,5 +31,15 @@ class BrandMst extends Model
     public function admin()
     {
         return $this->belongsTo(AdminMst::class, 'created_by');
+    }
+
+    public function getCategoryCountAttribute()
+    {
+        return $this->categories()->count();
+    }
+
+    public function getStockCountAttribute()
+    {
+        return $this->stocks()->count();
     }
 }
