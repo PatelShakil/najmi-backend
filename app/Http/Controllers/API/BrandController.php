@@ -61,6 +61,21 @@ class BrandController extends Controller
         }
     }
 
+    public function getBrandsPage(Request $request) {
+        $brands = BrandMst::with("admin")->get();
+        if (count($brands) > 0) {
+            return response()->json([
+                'status' => true,
+                'data' => $brands
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'data' => null
+            ]);
+        }
+    }
+
 
 
 }
