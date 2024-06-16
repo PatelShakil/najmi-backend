@@ -112,7 +112,7 @@ class ManageStockController extends Controller
                 ->with("color")
                 ->with("worker")->first();
 
-            if ($stock->worker == null) {
+            if ($stock->is_sold == false) {
                 return response()->json([
                     'status' => true,
                     'data' => $stock
