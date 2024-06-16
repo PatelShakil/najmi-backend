@@ -27,6 +27,7 @@ Route::group(['middleware' => "api"], (function () {
         Route::get('/getallcolors',[ColorController::class,'getAllColors']);
         Route::post('/updatebrand/{id}',[BrandController::class,'updateBrand']);
         Route::get('/deletebrand/{id}',[BrandController::class,'deleteBrand']);
+        Route::post('/updatecolor/{id}',[ColorController::class,'updateColor']);
     })->withoutMiddleware(WorkerRouteProtect::class);
 
     Route::prefix('/worker')->group(function () {

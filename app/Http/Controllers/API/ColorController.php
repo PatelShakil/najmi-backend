@@ -63,4 +63,30 @@ class ColorController extends Controller
             ]);
         }
     }
+
+    public function updateColor(Request $request,$id)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'code' => 'required',
+            'admin_id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'data' => $validator->messages()->first()
+            ]);
+        }
+
+        $color = ColorMst::find($id);
+        $color->name = $request->name;
+        $color->code = $request->code;
+        try {
+            $color->save();
+            return response()->json(['status' => true, 'data' => $color]);
+        } catch (Exception $e) {
+            return response()->json(['status' => false, 'data' => $e->getMessage()]);
+        }
+    }
 }
