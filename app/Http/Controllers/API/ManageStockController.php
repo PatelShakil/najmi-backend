@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\BrandMst;
 use App\Models\CategoryMst;
 use App\Models\StockMst;
+use App\Models\WorkerMst;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -32,8 +33,8 @@ class ManageStockController extends Controller
             foreach ($stocks as $stock) {
                 $br_no = 0;
 
-                if (BrandMst::where("id",$stock['brand_id'])->where("enabled", true)->exists()) {
-                    if (CategoryMst::where("id", $stock['category_id'])->where("enabled", true)->where("brand_id",$stock['brand_id'])->exists()) {
+                if (BrandMst::where("id", $stock['brand_id'])->where("enabled", true)->exists()) {
+                    if (CategoryMst::where("id", $stock['category_id'])->where("enabled", true)->where("brand_id", $stock['brand_id'])->exists()) {
                         // Loop to create stock entries
                         while ($br_no < $stock['quantity']) {
                             $stockDto = new StockMst();
@@ -82,17 +83,18 @@ class ManageStockController extends Controller
         }
     }
 
-    public function getStock(Request $request){
-        $stocks = BrandMst::where("enabled",true)->get();
-        
-        if(count($stocks) > 0){
+    public function getStock(Request $request)
+    {
+        $stocks = BrandMst::where("enabled", true)->get();
+
+        if (count($stocks) > 0) {
             return response()->json([
-               'status' => true,
+                'status' => true,
                 'data' => $stocks
             ]);
-        }else{
+        } else {
             return response()->json([
-               'status' => false,
+                'status' => false,
                 'data' => null
             ]);
         }
@@ -125,6 +127,49 @@ class ManageStockController extends Controller
             return response()->json([
                 'status' => false,
                 'data' => null
+            ]);
+        }
+    }
+
+    public function saleStock(Request $request, $br)
+    {
+        
+        $worker = WorkerMst::where("token", $request->header("token"))->first();
+
+        if ($worker != null && $worker->enabled) {
+            if (StockMst::where("barcode_no", $br)->exists()) {
+                $stock = StockMst::where('barcode_no', $br)->first();
+                if ($stock->enabled) {
+                    if (!$stock->is_sold) {
+                        $stock->is_sold = true;
+                        $stock->sold_by = $worker->id;
+                        $stock->save();
+                        return response()->json([
+                            'status' => true,
+                            'data' => $stock->name + " Sold Successfully"
+                        ]);
+                    } else {
+                        return response()->json([
+                            'status' => false,
+                            'data' => $stock->name + " Already Sold"
+                        ]);
+                    }
+                } else {
+                    return response()->json([
+                        'status' => false,
+                        'data' => $stock->name + " is Disable"
+                    ]);
+                }
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'data' => "Stock Not Found"
+                ]);
+            }
+        } else {
+            return response()->json([
+                'status' => false,
+                'data' => "Worker Not Found"
             ]);
         }
     }
