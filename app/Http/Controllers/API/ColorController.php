@@ -69,6 +69,7 @@ class ColorController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'code' => 'required',
+            'enabled' => 'required',
             'admin_id' => 'required',
         ]);
 
@@ -82,6 +83,7 @@ class ColorController extends Controller
         $color = ColorMst::find($id);
         $color->name = $request->name;
         $color->code = $request->code;
+        $color->enabled = $request->enabled == "true" ? true : false;
         try {
             $color->save();
             return response()->json(['status' => true, 'data' => $color]);
