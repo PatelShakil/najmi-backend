@@ -39,7 +39,8 @@ class ColorController extends Controller
         }
     }
 
-    public function getColors(Request $request){
+    public function getColors(Request $request)
+    {
         $colors = ColorMst::where('enabled', true)->with("admin")->get();
         return response()->json([
             'status' => true,
@@ -47,5 +48,19 @@ class ColorController extends Controller
         ]);
     }
 
-
+    public function getAllColors(Request $request)
+    {
+        $colors = ColorMst::with("admin")->get();
+        if (count($colors) > 0) {
+            return response()->json([
+                'status' => true,
+                'data' => $colors
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'data' => null
+            ]);
+        }
+    }
 }
