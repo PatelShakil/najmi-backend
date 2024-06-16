@@ -96,7 +96,7 @@ class BrandController extends Controller
                 $brand->save();
                 return response()->json([
                     'status' => true,
-                    'data' => $brand
+                    'data' => $request->enabled
                 ]);
             } catch (Exception $e) {
                 return response()->json([
