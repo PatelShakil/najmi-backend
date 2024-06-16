@@ -65,6 +65,7 @@ class CategoryController extends Controller
         
         $categories = CategoryMst::with("brand")->with("admin")->get();
 
+        
         if (count($categories) > 0 ) {
             return response()->json([
                 "status" => true,

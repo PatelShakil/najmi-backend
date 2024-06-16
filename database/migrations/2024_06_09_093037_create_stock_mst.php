@@ -26,6 +26,7 @@ return new class extends Migration
             $table->boolean("is_sold")->default(false);
             $table->unsignedBigInteger("sold_by")->nullable();
             $table->foreign("sold_by")->references("id")->on("worker_mst")->cascadeOnDelete();
+            $table->boolean("enabled")->default(true);
             $table->timestamps();
         });
     }
