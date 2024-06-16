@@ -133,7 +133,7 @@ class ManageStockController extends Controller
 
     public function saleStock(Request $request, $br)
     {
-        
+
         $worker = WorkerMst::where("token", $request->header("token"))->first();
 
         if ($worker != null && $worker->enabled) {
@@ -146,7 +146,7 @@ class ManageStockController extends Controller
                         $stock->save();
                         return response()->json([
                             'status' => true,
-                            'data' => $stock->name + " Sold Successfully"
+                            'data' => $br + " Sold Successfully"
                         ]);
                     } else {
                         return response()->json([
