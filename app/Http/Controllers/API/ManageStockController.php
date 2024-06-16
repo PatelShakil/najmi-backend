@@ -146,18 +146,18 @@ class ManageStockController extends Controller
                         $stock->save();
                         return response()->json([
                             'status' => true,
-                            'data' => $br + " Sold Successfully"
+                            'data' => $br . " Sold Successfully"
                         ]);
                     } else {
                         return response()->json([
                             'status' => false,
-                            'data' => $br + " Already Sold"
+                            'data' => $br . " Already Sold"
                         ]);
                     }
                 } else {
                     return response()->json([
                         'status' => false,
-                        'data' => $br + " is Disable"
+                        'data' => $br . " is Disable"
                     ]);
                 }
             } else {
