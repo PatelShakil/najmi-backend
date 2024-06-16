@@ -91,7 +91,7 @@ class BrandController extends Controller
         } else {
             $brand = BrandMst::find($id);
             $brand->name = $request->name;
-            $brand->enabled = boolval($request->enabled);
+            $brand->enabled = $request->enabled == "true" ? true : false;
             try {
                 $brand->save();
                 return response()->json([
