@@ -138,7 +138,7 @@ class ManageStockController extends Controller
 
         if ($worker != null && $worker->enabled) {
             if (StockMst::where("barcode_no", $br)->exists()) {
-                $stock = StockMst::where('barcode_no', $br)->first();
+                $stock = StockMst::where('barcode_no', $br)->get()->first();
                 if ($stock->enabled) {
                     if (!$stock->is_sold) {
                         $stock->is_sold = true;
@@ -151,13 +151,13 @@ class ManageStockController extends Controller
                     } else {
                         return response()->json([
                             'status' => false,
-                            'data' => $stock->name + " Already Sold"
+                            'data' => $br + " Already Sold"
                         ]);
                     }
                 } else {
                     return response()->json([
                         'status' => false,
-                        'data' => $stock->name + " is Disable"
+                        'data' => $br + " is Disable"
                     ]);
                 }
             } else {
