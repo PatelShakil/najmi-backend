@@ -21,13 +21,13 @@ class CategoryController extends Controller
         ]);
 
         // Store the image file
-        $imagePath = $request->file('image')->store('public/category-images');        
+        $imagePath = $request->file('image')->store('public/category-images');
 
         // Create the category
         $category = new CategoryMst();
         $category->name = $validatedData['name'];
         $category->brand_id = $validatedData['brand_id'];
-        $category->img = str_replace("public", "public/storage",$imagePath);
+        $category->img = str_replace("public", "public/storage", $imagePath);
         $category->created_by = $request->admin_id;
         try {
             $category->save();
@@ -59,14 +59,14 @@ class CategoryController extends Controller
             ]);
         }
     }
-    
+
     public function getCategories(Request $request)
-    {           
-        
+    {
+
         $categories = CategoryMst::with("brand")->with("admin")->get();
 
-        
-        if (count($categories) > 0 ) {
+
+        if (count($categories) > 0) {
             return response()->json([
                 "status" => true,
                 "data" => $categories
@@ -79,55 +79,49 @@ class CategoryController extends Controller
         }
     }
 
-    public function updateCategory(Request $request,$id){
-        $validator = Validator::make($request->all(), [
-            'name' =>'required|string',
-            'enabled'=>'required',
-            'brand_id' =>'required|integer',
+    public function updateCategory(Request $request, $id)
+    {
+        $validatedData = $request->validate([
+            'name' => 'required|string',
+            'brand_id' => 'required|integer',
+            'enabled' => 'required'
         ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-               'status' => false,
-                'data' => $validator->messages()->first()
-            ]);
-        }
 
         $category = CategoryMst::find($id);
         if ($category == null) {
             return response()->json([
-               'status' => false,
+                'status' => false,
                 'data' => "Category Not Found"
             ]);
         }
 
-        $category->name = $request->name;
-        $category->brand_id = $request->brand_id;
-        $category->enabled = $request->enabled == "true" ? true : false;
-        try{
-        if($request->img == $category->img){
-            $category->save();
+        $category->name = $validatedData['name'];
+        $category->brand_id = $validatedData['brand_id'];
+        $category->enabled = $validatedData['enabled'] == "true" ? true : false;
+        try {
+            if ($validatedData['img'] == $category->img) {
+                $category->save();
+                return response()->json([
+                    'status' => true,
+                    'data' => $category
+                ]);
+            } else {
+                if (file_exists(public_path(str_replace("public/storage", "storage", $category->img)))) {
+                    unlink(public_path(str_replace("public/storage", "storage", $category->img)));
+                }
+                $imagePath = $request->file('image')->store('public/category-images');
+                $category->img = str_replace("public", "public/storage", $imagePath);
+                $category->save();
+                return response()->json([
+                    'status' => true,
+                    'data' => $category
+                ]);
+            }
+        } catch (Exception $e) {
             return response()->json([
-               'status' => true,
-                'data' => $category
-            ]);
-        }else{
-            unlink(public_path(str_replace("public/storage","storage",$category->img)));
-            $imagePath = $request->file('image')->store('public/category-images');
-            $category->img = str_replace("public", "public/storage",$imagePath);
-            $category->save();
-            return response()->json([
-               'status' => true,
-                'data' => $category
+                'status' => false,
+                'data' => $e->getMessage()
             ]);
         }
-    }catch( Exception $e ){
-        return response()->json([
-           'status' => false,
-            'data' => $e->getMessage()
-        ]);
     }
-
-    }
-
 }
