@@ -28,6 +28,8 @@ Route::group(['middleware' => "api"], (function () {
         Route::post('/updatebrand/{id}',[BrandController::class,'updateBrand']);
         Route::get('/deletebrand/{id}',[BrandController::class,'deleteBrand']);
         Route::post('/updatecolor/{id}',[ColorController::class,'updateColor']);
+        Route::post('/updatecategory/{id}',[CategoryController::class,'updateCategory']);
+        Route::post('/updateworker/{id}',[AuthController::class,'updateWorker']);
     })->withoutMiddleware(WorkerRouteProtect::class);
 
     Route::prefix('/worker')->group(function () {

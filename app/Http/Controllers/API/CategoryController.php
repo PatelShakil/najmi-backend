@@ -79,4 +79,48 @@ class CategoryController extends Controller
         }
     }
 
+    public function updateCategory(Request $request,$id){
+        $validator = Validator::make($request->all(), [
+            'name' =>'required|string',
+            'enabled'=>'required',
+            'brand_id' =>'required|integer',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+               'status' => false,
+                'data' => $validator->errors()
+            ]);
+        }
+
+        $category = CategoryMst::find($id);
+        if ($category == null) {
+            return response()->json([
+               'status' => false,
+                'data' => "Category Not Found"
+            ]);
+        }
+
+        $category->name = $request->name;
+        $category->brand_id = $request->brand_id;
+        $category->enabled = $request->enabled == "true" ? true : false;
+        if($request->img == $category->img){
+            $category->save();
+            return response()->json([
+               'status' => true,
+                'data' => $category
+            ]);
+        }else{
+            unlink($category->img);
+            $imagePath = $request->file('image')->store('public/category-images');
+            $category->img = str_replace("public", "public/storage",$imagePath);
+            $category->save();
+            return response()->json([
+               'status' => true,
+                'data' => $category
+            ]);
+        }
+
+    }
+
 }
