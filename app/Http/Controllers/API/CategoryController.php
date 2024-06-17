@@ -84,7 +84,9 @@ class CategoryController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string',
             'brand_id' => 'required|integer',
-            'enabled' => 'required'
+            'enabled' => 'required',
+            'img'=>'required|string',
+            'image'=>'image|max:2048'
         ]);
 
         $category = CategoryMst::find($id);
