@@ -85,8 +85,7 @@ class CategoryController extends Controller
             'name' => 'required|string',
             'brand_id' => 'required|integer',
             'enabled' => 'required',
-            'img'=>'required|string',
-            'image'=>'image|max:2048'
+            'img'=>'required|string'
         ]);
 
         $category = CategoryMst::find($id);

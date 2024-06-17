@@ -157,4 +157,53 @@ class AuthController extends Controller
             ]);
         }
     }
+
+    public function updateWorker(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string',
+            'phone' => 'required|min:10',
+            'pin' => 'required|min:6',
+            'enabled' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                "status" => false,
+                "data" => $validator->messages()->first()
+            ]);
+        } else {
+            $admin = AdminMst::where("token", $request->header("token"))->get()->first();
+            if ($admin != null && $admin->enabled) {
+                $worker = WorkerMst::find($id);
+                if ($worker != null) {
+                    $worker->name = $request->name;
+                    $worker->phone = $request->phone;
+                    $worker->pin = $request->pin;
+                    $worker->enabled = $request->enabled == "true" ? true : false;
+                    try {
+                        $worker->save();
+                        return response()->json([
+                            "status" => true,
+                            "data" => $worker
+                        ]);
+                    } catch (Exception $e) {
+                        return response()->json([
+                            "status" => false,
+                            "data" => $e->getMessage()
+                        ]);
+                    }
+                } else {
+                    return response()->json([
+                        "status" => false,
+                        "data" => "Worker Not Found"
+                    ]);
+                }
+            } else {
+                return response()->json([
+                    "status" => false,
+                    "data" => "Admin Not Found or Suspended"
+                ]);
+            }
+        }
+    }
 }
