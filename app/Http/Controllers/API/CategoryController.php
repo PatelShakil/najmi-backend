@@ -89,7 +89,7 @@ class CategoryController extends Controller
         if ($validator->fails()) {
             return response()->json([
                'status' => false,
-                'data' => $validator->errors()
+                'data' => $validator->messages()->first()
             ]);
         }
 
@@ -104,6 +104,7 @@ class CategoryController extends Controller
         $category->name = $request->name;
         $category->brand_id = $request->brand_id;
         $category->enabled = $request->enabled == "true" ? true : false;
+        try{
         if($request->img == $category->img){
             $category->save();
             return response()->json([
@@ -120,6 +121,12 @@ class CategoryController extends Controller
                 'data' => $category
             ]);
         }
+    }catch( Exception $e ){
+        return response()->json([
+           'status' => false,
+            'data' => $e->getMessage()
+        ]);
+    }
 
     }
 
