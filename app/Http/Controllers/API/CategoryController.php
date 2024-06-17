@@ -111,7 +111,7 @@ class CategoryController extends Controller
                 'data' => $category
             ]);
         }else{
-            unlink(str_replace("public/storage","public",$category->img));
+            unlink(asset(str_replace("public/storage","public",$category->img)));
             $imagePath = $request->file('image')->store('public/category-images');
             $category->img = str_replace("public", "public/storage",$imagePath);
             $category->save();
