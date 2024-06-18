@@ -158,6 +158,22 @@ class AuthController extends Controller
         }
     }
 
+    public function getAdmins(Request $request)
+    {
+        $admin = AdminMst::get();
+        if ($admin != null && count($admin) > 0) {
+            return response()->json([
+                "status" => true,
+                "data" => $admin
+            ]);
+        } else {
+            return response()->json([
+                "status" => false,
+                "data" => "Workers Not Found"
+            ]);
+        }
+    }
+
     public function updateWorker(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
