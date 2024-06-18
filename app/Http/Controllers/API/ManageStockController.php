@@ -116,7 +116,7 @@ class ManageStockController extends Controller
                     'status' => true,
                     'data' => $stock
                 ]);
-            }else{
+            } else {
                 return response()->json([
                     'status' => false,
                     'data' => null
@@ -169,6 +169,33 @@ class ManageStockController extends Controller
             return response()->json([
                 'status' => false,
                 'data' => "Worker Not Found"
+            ]);
+        }
+    }
+
+    public function returnProduct(Request $request, $br)
+    {
+        $stock = StockMst::where("barcode_no", $br)->first();
+
+        if ($stock != null) {
+            $stock->is_sold = false;
+            $stock->sold_by = null;
+            try {
+                $stock->save();
+                return response()->json([
+                    'status' => true,
+                    'data' => $stock
+                ]);
+            } catch (Exception $e) {
+                return response()->json([
+                    'status' => false,
+                    'data' => $e->getMessage()
+                ]);
+            }
+        } else {
+            return response()->json([
+                'status' => false,
+                'data' => "Stock Not Available"
             ]);
         }
     }
