@@ -24,6 +24,10 @@ class AdminMst extends Model
         "enabled"=>'boolean'
     ];
 
+    protected $hidden =[
+        'password'
+    ];
+
 
     public function workers()
     {
