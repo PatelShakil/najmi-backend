@@ -182,6 +182,13 @@ class ManageStockController extends Controller
             $stock->sold_by = null;
             try {
                 $stock->save();
+                $stock = StockMst::where('barcode_no', $br)
+                    ->with("admin")
+                    ->with("brand")
+                    ->with("category")
+                    ->with("color")
+                    ->with("worker")->first();
+
                 return response()->json([
                     'status' => true,
                     'data' => $stock
