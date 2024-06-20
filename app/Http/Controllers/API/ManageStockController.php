@@ -209,7 +209,7 @@ class ManageStockController extends Controller
 
     public function getStockList(Request $request,$c_id){
         $stocks = StockMst::where("category_id",$c_id)
-        ->with(["worker","category","brand","admin"])
+        ->with(["worker","category","brand","admin","color"])
         ->get();
 
         if (count($stocks) > 0) {
