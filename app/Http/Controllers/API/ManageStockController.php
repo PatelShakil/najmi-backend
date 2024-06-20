@@ -7,8 +7,10 @@ use App\Models\BrandMst;
 use App\Models\CategoryMst;
 use App\Models\StockMst;
 use App\Models\WorkerMst;
+use DateTime;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -142,6 +144,7 @@ class ManageStockController extends Controller
                     if (!$stock->is_sold) {
                         $stock->is_sold = true;
                         $stock->sold_by = $worker->id;
+                        $stock->sold_at = new DateTime();
                         $stock->save();
                         return response()->json([
                             'status' => true,
