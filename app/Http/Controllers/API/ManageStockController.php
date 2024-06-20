@@ -206,4 +206,22 @@ class ManageStockController extends Controller
             ]);
         }
     }
+
+    public function getStockList(Request $request,$c_id){
+        $stocks = StockMst::where("category_id",$c_id)
+        ->with(["worker","category","brand","admin"])
+        ->get();
+
+        if (count($stocks) > 0) {
+            return response()->json([
+               'status' => true,
+                'data' => $stocks
+            ]);
+        } else {
+            return response()->json([
+               'status' => false,
+                'data' => null
+            ]);
+        }
+    }
 }

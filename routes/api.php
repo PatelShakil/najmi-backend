@@ -38,6 +38,7 @@ Route::group(['middleware' => "api"], (function () {
         Route::post('/login', [AuthController::class, 'workerLogin']);
         Route::get('/getstock/{br}',[ManageStockController::class, 'getStockDetails']);
         Route::get('/salestock/{br}',[ManageStockController::class,'saleStock']);
+        Route::get('/getstocklist/{c_id}',[ManageStockController::class,'getStockList']);
     })->withoutMiddleware(AdminRouteProtect::class);
 
 }));
