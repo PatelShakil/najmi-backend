@@ -23,9 +23,15 @@ class StockMst extends Model
         'is_sold'=>'boolean',
         'enabled'=>'boolean',
         'created_at' => 'datetime:Y-m-d H:i:s',
+        'updated_at'=> 'datetime:Y-m-d H:i:s'
     ];
 
     public function getCreatedAtAttribute($value)
+    {
+        return Carbon::parse($value)->setTimezone('Asia/Kolkata')->format('Y-m-d H:i:s');
+    }
+
+    public function getUpdatedAtAttribute($value)
     {
         return Carbon::parse($value)->setTimezone('Asia/Kolkata')->format('Y-m-d H:i:s');
     }
