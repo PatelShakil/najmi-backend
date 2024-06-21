@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -21,7 +22,13 @@ class StockMst extends Model
     protected $casts = [
         'is_sold'=>'boolean',
         'enabled'=>'boolean',
+        'created_at' => 'datetime:Y-m-d H:i:s',
     ];
+
+    public function getCreatedAtAttribute($value)
+    {
+        return Carbon::parse($value)->setTimezone('Asia/Kolkata')->format('Y-m-d H:i:s');
+    }
 
     public function brand()
     {
