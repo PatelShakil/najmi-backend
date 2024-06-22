@@ -184,6 +184,7 @@ class ManageStockController extends Controller
         if ($stock != null) {
             $stock->is_sold = false;
             $stock->sold_by = null;
+            $stock->sold_at = null;
             try {
                 $stock->save();
                 $stock = StockMst::where('barcode_no', $br)
