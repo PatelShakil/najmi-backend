@@ -241,8 +241,8 @@ class ManageStockController extends Controller
                 'end_date' => 'required|date|after_or_equal:startDate',
             ]);
 
-            $startDate = Carbon::parse($request->startDate);
-            $endDate = Carbon::parse($request->endDate);
+            $startDate = Carbon::parse($request->start_date);
+            $endDate = Carbon::parse($request->end_date);
         }
 
         // Retrieve the data from StockMst where created_at is between startDate and endDate
