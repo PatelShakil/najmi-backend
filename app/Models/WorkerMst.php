@@ -24,7 +24,7 @@ class WorkerMst extends Model
         "pin"=>"integer"
     ];
 
-    protected $append = [
+    protected $appends = [
         "total_sale","last_30_sale","total_money","last_30_money"
     ];
 
