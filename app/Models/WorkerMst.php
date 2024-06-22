@@ -25,7 +25,10 @@ class WorkerMst extends Model
     ];
 
     protected $appends = [
-        "total_sale","last_30_sale","total_money","last_30_money"
+        'total_sale',
+        'last_30_sale',
+        'total_money',
+        'last_30_money'
     ];
 
     public function admin()
@@ -38,19 +41,19 @@ class WorkerMst extends Model
         return $this->hasMany(StockMst::class,'sold_by');
     }
 
-    private function getTotalSaleAttribute(){
+    public function getTotalSaleAttribute(){
         return $this->stocks()->count();
     }
 
-    private function getLast30SaleAttribute(){
+    public function getLast30SaleAttribute(){
         return $this->stocks()->whereBetween('created_at', [date('Y-m-d', strtotime('-30 days')), date('Y-m-d')])->count();
     }
 
-    private function getTotalMoneyAttribute(){
+    public function getTotalMoneyAttribute(){
         return $this->stocks()->sum('mrp');
     }
 
-    private function getLast30MoneyAttribute(){
+    public function getLast30MoneyAttribute(){
         return $this->stocks()->whereBetween('created_at', [date('Y-m-d', strtotime('-30 days')), date('Y-m-d')])->sum('mrp');
     }
 
