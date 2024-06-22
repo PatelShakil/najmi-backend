@@ -235,10 +235,10 @@ class ManageStockController extends Controller
         $startDate = $endDate->copy()->subDays(30);
 
         // Check if the request has custom startDate and endDate
-        if ($request->has(['startDate', 'endDate'])) {
+        if ($request->has(['start_date', 'end_date'])) {
             $request->validate([
-                'startDate' => 'required|date',
-                'endDate' => 'required|date|after_or_equal:startDate',
+                'start_date' => 'required|date',
+                'end_date' => 'required|date|after_or_equal:startDate',
             ]);
 
             $startDate = Carbon::parse($request->startDate);
