@@ -32,6 +32,7 @@ Route::group(['middleware' => "api"], (function () {
         Route::post('/updateworker/{id}',[AuthController::class,'updateWorker']);
         Route::get('/returnproduct/{br}',[ManageStockController::class,'returnProduct']);
         Route::get('/getadmins',[AuthController::class,'getAdmins']);
+        Route::post('/getstockreport',[ManageStockController::class,'getStockReport']);
     })->withoutMiddleware(WorkerRouteProtect::class);
 
     Route::prefix('/worker')->group(function () {

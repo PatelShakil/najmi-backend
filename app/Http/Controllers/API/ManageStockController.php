@@ -7,6 +7,7 @@ use App\Models\BrandMst;
 use App\Models\CategoryMst;
 use App\Models\StockMst;
 use App\Models\WorkerMst;
+use Carbon\Carbon;
 use DateTime;
 use Exception;
 use Illuminate\Http\Request;
@@ -227,4 +228,31 @@ class ManageStockController extends Controller
             ]);
         }
     }
+    public function getStockReport(Request $request)
+    {
+        // Get the current date and the date 30 days ago
+        $endDate = Carbon::now();
+        $startDate = $endDate->copy()->subDays(30);
+
+        // Check if the request has custom startDate and endDate
+        if ($request->has(['startDate', 'endDate'])) {
+            $request->validate([
+                'startDate' => 'required|date',
+                'endDate' => 'required|date|after_or_equal:startDate',
+            ]);
+
+            $startDate = Carbon::parse($request->startDate);
+            $endDate = Carbon::parse($request->endDate);
+        }
+
+        // Retrieve the data from StockMst where created_at is between startDate and endDate
+        $stockData = StockMst::whereBetween('created_at', [$startDate, $endDate])
+        ->with(["worker", "category", "brand", "admin", "color"])
+        ->get();
+
+        // Return the data as JSON
+        return response()->json($stockData);
+    }
+
+
 }
