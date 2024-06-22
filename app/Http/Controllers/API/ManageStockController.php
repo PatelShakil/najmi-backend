@@ -211,19 +211,20 @@ class ManageStockController extends Controller
         }
     }
 
-    public function getStockList(Request $request,$c_id){
-        $stocks = StockMst::where("category_id",$c_id)
-        ->with(["worker","category","brand","admin","color"])
-        ->get();
+    public function getStockList(Request $request, $c_id)
+    {
+        $stocks = StockMst::where("category_id", $c_id)
+            ->with(["worker", "category", "brand", "admin", "color"])
+            ->get();
 
         if (count($stocks) > 0) {
             return response()->json([
-               'status' => true,
+                'status' => true,
                 'data' => $stocks
             ]);
         } else {
             return response()->json([
-               'status' => false,
+                'status' => false,
                 'data' => null
             ]);
         }
@@ -237,25 +238,23 @@ class ManageStockController extends Controller
         // Check if the request has custom startDate and endDate
         if ($request->has(['start_date', 'end_date'])) {
             $request->validate([
-                'start_date' => 'required|date',
-                'end_date' => 'required|date|after_or_equal:startDate',
-            ]);
+                'start_date' => 'required|date_format:m/d/Y',
+                'end_date' => 'required|date_format:m/d/Y|after_or_equal:start_date',
 
-            $startDate = Carbon::parse($request->start_date);
-            $endDate = Carbon::parse($request->end_date);
+            ]);
+            $startDate = Carbon::createFromFormat('m/d/Y', $request->start_date);
+            $endDate = Carbon::createFromFormat('m/d/Y', $request->end_date);
         }
 
         // Retrieve the data from StockMst where created_at is between startDate and endDate
-        $stockData = StockMst::whereBetween('created_at', [$startDate, $endDate])
-        ->with(["worker", "category", "brand", "admin", "color"])
-        ->get();
+        $stockData = StockMst::whereBetween('created_at', [$startDate->startOfDay(), $endDate->endOfDay()])
+            ->with(["worker", "category", "brand", "admin", "color"])
+            ->get();
 
         // Return the data as JSON
         return response()->json([
-            'status'=>true,
-            'data'=>$stockData
+            'status' => true,
+            'data' => $stockData
         ]);
     }
-
-
 }
