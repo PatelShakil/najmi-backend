@@ -240,7 +240,6 @@ class ManageStockController extends Controller
             $request->validate([
                 'start_date' => 'required|date_format:m/d/Y',
                 'end_date' => 'required|date_format:m/d/Y|after_or_equal:start_date',
-
             ]);
             $startDate = Carbon::createFromFormat('m/d/Y', $request->start_date);
             $endDate = Carbon::createFromFormat('m/d/Y', $request->end_date);
