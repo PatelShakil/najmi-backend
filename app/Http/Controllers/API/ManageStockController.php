@@ -251,7 +251,10 @@ class ManageStockController extends Controller
         ->get();
 
         // Return the data as JSON
-        return response()->json($stockData);
+        return response()->json([
+            'status'=>true,
+            'data'=>$stockData
+        ]);
     }
 
 
