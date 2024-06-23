@@ -20,9 +20,9 @@ class ProtectAPIRoute
         date_default_timezone_set("Asia/Kolkata");
         if (!str_contains($request->path(), "/login")) {
             $token = $request->header('token');
-            if (AdminMst::where("token", $token)->exists()) {
+            if (AdminMst::where("token", $token)->where("enabled", true)->exists()) {
                 return $next($request);
-            } else if (WorkerMst::where("token", $token)->exists()) {
+            } else if (WorkerMst::where("token", $token)->where("enabled",true)->exists()) {
                 return $next($request);
             } else {
                 return response()->json(["message" => "Unauthorized access"], 401);
