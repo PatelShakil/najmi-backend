@@ -33,6 +33,7 @@ Route::group(['middleware' => "api"], (function () {
         Route::get('/returnproduct/{br}',[ManageStockController::class,'returnProduct']);
         Route::get('/getadmins',[AuthController::class,'getAdmins']);
         Route::post('/getstockreport',[ManageStockController::class,'getStockReport']);
+        Route::get('/deletestock/{br}',[ManageStockController::class,'deleteStock']);
     })->withoutMiddleware(WorkerRouteProtect::class);
 
     Route::prefix('/worker')->group(function () {

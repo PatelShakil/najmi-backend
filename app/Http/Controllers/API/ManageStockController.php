@@ -257,4 +257,19 @@ class ManageStockController extends Controller
             'data' => $stockData
         ]);
     }
+    public function deleteStock(Request $request,$br){
+        $stock = StockMst::where("barcode_no",$br)->first();
+        if($stock!=null){
+            $stock->delete();
+            return response()->json([
+                'status' => true,
+                'data' => "Product Deleted Successfully"
+            ]);
+        }else{
+            return response()->json([
+                'status' => false,
+                'data' => "Stock Not Found"
+            ]);
+        }
+    }
 }
