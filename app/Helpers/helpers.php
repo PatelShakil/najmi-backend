@@ -28,6 +28,11 @@ if (!function_exists('generateBarcode')) {
 
         // Generate the initial barcode
         $barcode = sprintf('NK-%03d-%03d-%06d', $brandId, $catNo, $nextProductId);
+        while (StockMst::where("barcode_no", $barcode)->exists()) {
+            $nextProductId++;
+            $barcode = sprintf('NK-%03d-%03d-%06d', $brandId, $catNo, $nextProductId);
+        }
+
 
         // Log for debugging
         Log::info('Generated Barcode:', [
