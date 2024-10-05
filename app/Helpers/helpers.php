@@ -15,9 +15,19 @@ if (!function_exists('generateBarcode')) {
 
         // Increment the product ID sequentially
         $nextProductId = $existingCount + 1;
+        $categories = BrandMst::where("id", $brandId)->with("categories")->first()->categories;
+
+        $catNo = 0;
+        foreach ($categories as $category) {
+            $catNo++;
+            if ($category->id == $categoryId) {
+                break;
+            }
+        }
+
 
         // Generate the initial barcode
-        $barcode = sprintf('NK-%03d-%03d-%06d', $brandId, $categoryId, $nextProductId);
+        $barcode = sprintf('NK-%03d-%03d-%06d', $brandId, $catNo, $nextProductId);
 
         // Log for debugging
         Log::info('Generated Barcode:', [
